@@ -12,8 +12,8 @@ public interface PatientRepository extends CrudRepository<Patient, Integer> {
     @Modifying
     @Transactional
     @Query("delete from Patient p where p.patientNo=?1")
-    void deletePatientById(Long patientId);
+    void deletePatientByNo(Long patientNo);
 
     @Query("select p from Patient p where p.patientNo=?1")
-    Patient getPatientById(Long patientId);
+    Patient getPatientByNo(Long patientNo);
 }

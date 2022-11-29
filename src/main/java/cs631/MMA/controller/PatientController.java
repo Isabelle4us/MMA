@@ -1,6 +1,5 @@
 package cs631.MMA.controller;
 
-import cs631.MMA.entities.Clinic;
 import cs631.MMA.entities.Patient;
 import cs631.MMA.repositories.PatientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,13 +20,12 @@ public class PatientController {
 
     @DeleteMapping
     public @ResponseBody String deletePatient (@RequestBody Patient patient) {
-        patientRepository.deletePatientById(patient.getPatientNo());
+        patientRepository.deletePatientByNo(patient.getPatientNo());
         return "Patient Deleted";
     }
 
-    @GetMapping
-    public @ResponseBody Patient getPatient (@RequestBody Patient patient) {
-        return patientRepository.getPatientById(patient.getPatientNo());
-
+    @GetMapping("/{id}")
+    public @ResponseBody Patient getPatient (@PathVariable Long id) {
+        return patientRepository.getPatientByNo(id);
     }
 }

@@ -12,17 +12,13 @@ public class ClinicController {
     @Autowired
     private ClinicRepository clinicRepository;
 
-    @PostMapping(path="/add")
-    public @ResponseBody String addClinic (@RequestParam String name, @RequestParam String address) {
-        Clinic clinic = new Clinic();
-        clinic.setAddress(address);;
-        clinic.setName(name);
-
+    @PostMapping
+    public @ResponseBody String addClinic (@RequestBody Clinic clinic) {
         clinicRepository.save(clinic);
         return "Clinic Saved";
     }
 
-    @GetMapping(path="/list")
+    @GetMapping
     public @ResponseBody Iterable<Clinic> getAllClinics() {
         return clinicRepository.findAll();
     }
