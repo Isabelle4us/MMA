@@ -7,23 +7,19 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.util.List;
 
+@Entity
 @Getter
 @Setter
-@Entity
-@Inheritance(strategy = InheritanceType.JOINED)
-public class Surgeon extends Personnel {
+public class Room {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
-    private String contractType;
-    private Integer contractLength;
-    private String specialty;
 
     @OneToMany(
-            mappedBy = "surgeon",
+            mappedBy = "room",
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
-    @JsonManagedReference(value="surgeon-operation")
-    private List<Operation> operations;
+    @JsonManagedReference
+    private List<Bed> beds;
 }

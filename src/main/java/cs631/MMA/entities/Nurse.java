@@ -1,8 +1,13 @@
 package cs631.MMA.entities;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 
 @Entity
+@Getter
+@Setter
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Nurse extends Personnel {
     @Id

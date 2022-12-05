@@ -4,15 +4,14 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Getter
 @Setter
-public class Clinic {
+public class Bed {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
-    private String name;
-    private String address;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Room room;
 }

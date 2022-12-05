@@ -1,5 +1,6 @@
 package cs631.MMA.entities;
 
+import cs631.MMA.entities.enumtype.Gender;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,6 +13,7 @@ public class Personnel {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
+    @Column(unique = true)
     private Long empNo;
     private String name;
     @Enumerated(EnumType.STRING)
