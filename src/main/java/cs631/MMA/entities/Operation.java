@@ -1,8 +1,7 @@
 package cs631.MMA.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -10,10 +9,13 @@ import java.time.LocalTime;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @Entity
 public class Operation {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -24,7 +26,7 @@ public class Operation {
     @JsonBackReference(value="patient-operation")
     private Patient patient;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private Surgery surgery;
 
     private String location;
@@ -34,4 +36,6 @@ public class Operation {
     private LocalTime start;
 
     private LocalTime end;
+
+    private Boolean finished;
 }

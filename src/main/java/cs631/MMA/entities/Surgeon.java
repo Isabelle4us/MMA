@@ -13,7 +13,7 @@ import java.util.List;
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Surgeon extends Personnel {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String contractType;
     private Integer contractLength;

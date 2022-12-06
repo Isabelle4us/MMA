@@ -1,9 +1,11 @@
 package cs631.MMA.controller;
 
 import cs631.MMA.entities.Consultation;
+import cs631.MMA.entities.Operation;
 import cs631.MMA.entities.Patient;
 import cs631.MMA.models.AppointmentRequest;
 import cs631.MMA.repositories.ConsultationRepository;
+import cs631.MMA.repositories.OperationRepository;
 import cs631.MMA.repositories.PatientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,6 +24,9 @@ public class PatientController {
 
     @Autowired
     private ConsultationRepository consultationRepository;
+
+    @Autowired
+    private OperationRepository operationRepository;
 
     @PostMapping
     public @ResponseBody String addPatient (@RequestBody Patient patient) {
@@ -58,8 +63,14 @@ public class PatientController {
                 .collect(Collectors.toList());
     }
 
-    @PostMapping("/{id}/schedule")
+    @PostMapping("/{id}/appointment")
     public @ResponseBody List<Consultation> getAppointments(@PathVariable Integer id, @RequestBody AppointmentRequest request) {
         return consultationRepository.getAppointments(id, request.getPhysicianId(), request.getDate());
+    }
+
+    @PostMapping("/{id}/operation")
+    public @ResponseBody List<Operation> getOperations(@PathVariable Integer id) {
+        return patientRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("patientId not found"))
+                .getOperations();
     }
 }

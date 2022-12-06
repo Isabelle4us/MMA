@@ -16,13 +16,18 @@ public class PhysicianController {
     PhysicianRepository physicianRepository;
 
     @PostMapping
-    public @ResponseBody String addPhysician (@RequestBody Physician physician) {
-        physicianRepository.save(physician);
-        return "Physician Added";
+    public @ResponseBody Integer addPhysician (@RequestBody Physician physician) {
+        Physician saved = physicianRepository.save(physician);
+        return saved.getId();
     }
 
-    @GetMapping("/{empNo}")
-    public @ResponseBody Physician getPhysicianById (@PathVariable Long empNo) {
-        return physicianRepository.getPhysicianByEmpNo(empNo);
+    @GetMapping("/{id}")
+    public @ResponseBody Physician getPhysicianById (@PathVariable Integer id) {
+        return physicianRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("physicianId not found"));
+    }
+
+    @GetMapping
+    public @ResponseBody Iterable<Physician> getPhysicians (@PathVariable Integer id) {
+        return physicianRepository.findAll();
     }
 }
