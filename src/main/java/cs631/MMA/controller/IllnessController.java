@@ -14,9 +14,9 @@ public class IllnessController {
     private IllnessRepository illnessRepository;
 
     @PostMapping
-    public @ResponseBody String addIllness (@RequestBody Illness illness) {
-        illnessRepository.save(illness);
-        return "illness Added";
+    public @ResponseBody Integer addIllness (@RequestBody Illness illness) {
+        Illness saved = illnessRepository.save(illness);
+        return saved.getId();
     }
 
     @DeleteMapping("/{id}")

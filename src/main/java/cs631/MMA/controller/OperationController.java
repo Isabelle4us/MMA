@@ -1,8 +1,7 @@
 package cs631.MMA.controller;
 
 import cs631.MMA.entities.*;
-import cs631.MMA.models.OperationRequest;
-import cs631.MMA.models.ScheduleRequest;
+import cs631.MMA.models.OperationDTO;
 import cs631.MMA.repositories.OperationRepository;
 import cs631.MMA.repositories.PatientRepository;
 import cs631.MMA.repositories.SurgeonRepository;
@@ -29,22 +28,19 @@ public class OperationController {
     private SurgeryRepository surgeryRepository;
 
     @PostMapping
-    public @ResponseBody Integer addOperation(@RequestBody OperationRequest request) {
-        Surgeon surgeon = surgeonRepository.findById(request.getSurgeonId()).orElseThrow(() -> new IllegalArgumentException("surgeonId not found"));
-        Patient patient = patientRepository.findById(request.getPatientId()).orElseThrow(() -> new IllegalArgumentException("patientId not found"));
-        Surgery surgery = surgeryRepository.findById(request.getSurgeryId()).orElseThrow(() -> new IllegalArgumentException("surgeryId not found"));
+    public @ResponseBody Integer addOperation(@RequestBody OperationDTO operationDTO) {
+        Surgeon surgeon = surgeonRepository.findById(operationDTO.getSurgeonId()).orElseThrow(() -> new IllegalArgumentException("surgeonId not found"));
+        Patient patient = patientRepository.findById(operationDTO.getPatientId()).orElseThrow(() -> new IllegalArgumentException("patientId not found"));
+        Surgery surgery = surgeryRepository.findById(operationDTO.getSurgeryId()).orElseThrow(() -> new IllegalArgumentException("surgeryId not found"));
 
-        Operation operation = Operation.builder()
-                .surgeon(surgeon)
-                .patient(patient)
-                .surgery(surgery)
-                .location(request.getLocation())
-                .start(request.getStart())
-                .end(request.getEnd())
-                .date(request.getDate())
-                .finished(request.getFinished())
-                .build();
+        Operation operation = operationDTO.toOperation();
+        operation.setPatient(patient);
+        operation.setSurgeon(surgeon);
+        operation.setSurgery(surgery);
+
+        patient.getOperations().add(operation);
         surgeon.getOperations().add(operation);
+
         Operation saved = operationRepository.save(operation);
         return saved.getId();
     }

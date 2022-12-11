@@ -1,6 +1,7 @@
 package cs631.MMA.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import cs631.MMA.models.ConsultationDTO;
 import lombok.*;
 
 import javax.persistence.*;
@@ -19,23 +20,30 @@ public class Consultation {
     private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonBackReference(value="physician-consultation")
     private Physician physician;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonBackReference(value="patient-consultation")
     private Patient patient;
 
     @ManyToOne
     private Illness illness;
-
     private LocalDate date;
-
     private LocalTime start;
-
     private LocalTime end;
-
-    private Boolean Diagnosed;
-
+    private Boolean diagnosed;
     private Boolean active;
+
+    public ConsultationDTO toDTO() {
+        return ConsultationDTO.builder()
+                .date(this.date)
+                .start(this.start)
+                .end(this.end)
+                .diagnosed(this.diagnosed)
+                .active(this.active)
+                .id(this.id)
+                .illnessId(this.illness.getId())
+                .patientId(this.patient.getId())
+                .physicianId(this.physician.getId())
+                .build();
+    }
 }

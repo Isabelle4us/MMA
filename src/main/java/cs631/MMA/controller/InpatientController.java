@@ -1,14 +1,8 @@
 package cs631.MMA.controller;
 
-import cs631.MMA.entities.Bed;
-import cs631.MMA.entities.Inpatient;
-import cs631.MMA.entities.Nurse;
-import cs631.MMA.entities.Patient;
-import cs631.MMA.models.AssignInpatientRequest;
-import cs631.MMA.repositories.BedRepository;
-import cs631.MMA.repositories.InpatientRepository;
-import cs631.MMA.repositories.NurseRepository;
-import cs631.MMA.repositories.PatientRepository;
+import cs631.MMA.entities.*;
+import cs631.MMA.models.InpatientDTO;
+import cs631.MMA.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,18 +21,21 @@ public class InpatientController {
     private PatientRepository patientRepository;
     @Autowired
     private NurseRepository nurseRepository;
+    @Autowired
+    private PhysicianRepository physicianRepository;
 
     @PostMapping
-    public @ResponseBody Integer addInpatientToBed(@RequestBody AssignInpatientRequest request) {
-        Bed bed = bedRepository.findById(request.getBedId()).orElseThrow(() -> new IllegalArgumentException("bedId not found"));
-        Patient patient = patientRepository.findById(request.getPatientId()).orElseThrow(() -> new IllegalArgumentException("patientId not found"));
-        Nurse nurse = nurseRepository.findById(request.getNurseId()).orElseThrow(() -> new IllegalArgumentException("patientId not found"));
+    public @ResponseBody Integer addInpatientToBed(@RequestBody InpatientDTO inpatientDTO) {
+        Bed bed = bedRepository.findById(inpatientDTO.getBedId()).orElseThrow(() -> new IllegalArgumentException("bedId not found"));
+        Patient patient = patientRepository.findById(inpatientDTO.getPatientId()).orElseThrow(() -> new IllegalArgumentException("patientId not found"));
+        Nurse nurse = nurseRepository.findById(inpatientDTO.getNurseId()).orElseThrow(() -> new IllegalArgumentException("patientId not found"));
+        Physician physician = physicianRepository.findById(inpatientDTO.getPhysicianId()).orElseThrow(() -> new IllegalArgumentException("physicianId not found"));
 
-        Inpatient inpatient = Inpatient.builder()
-                .bed(bed)
-                .patient(patient)
-                .nurse(nurse)
-                .build();
+        Inpatient inpatient = inpatientDTO.toInpatient();
+        inpatient.setBed(bed);
+        inpatient.setPatient(patient);
+        inpatient.setNurse(nurse);
+        inpatient.setPhysician(physician);
 
         Inpatient saved = inpatientRepository.save(inpatient);
         return saved.getId();

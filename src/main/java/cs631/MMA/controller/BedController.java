@@ -3,11 +3,16 @@ package cs631.MMA.controller;
 import cs631.MMA.entities.Bed;
 import cs631.MMA.entities.Clinic;
 import cs631.MMA.entities.Room;
+import cs631.MMA.models.BedDTO;
 import cs631.MMA.repositories.BedRepository;
 import cs631.MMA.repositories.RoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping(path="/bed")
@@ -16,21 +21,29 @@ public class BedController {
     private BedRepository bedRepository;
 
     @Autowired
-    private RoomRepository RoomRepository;
+    private RoomRepository roomRepository;
 
     @GetMapping("/availability")
-    public @ResponseBody Iterable<Bed> getAvailableBeds() {
-        return bedRepository.findAllAvailableBeds();
+    public @ResponseBody List<BedDTO> getAvailableBeds() {
+        return bedRepository.findAllAvailableBeds().stream()
+                .map(Bed::toDTO)
+                .collect(Collectors.toList());
     }
 
-    @PostMapping("/{roomId}")
-    public @ResponseBody Integer createBed(@PathVariable Integer roomId) {
-        Room room = RoomRepository.findById(roomId).orElseThrow(() -> new IllegalArgumentException("roomId not exists"));
-        Bed bed = Bed.builder()
-                .room(room)
-                .available(true)
-                .build();
+    @PostMapping
+    public @ResponseBody Integer createBed(@RequestBody BedDTO bedDTO) {
+        Optional<Room> roomOptional = roomRepository.findById(bedDTO.getRoomId());
+        Room room = null;
+        if (roomOptional.isEmpty()) {
+            room = roomRepository.save(new Room());
+        } else {
+            room = roomOptional.get();
+        }
+
+        Bed bed = bedDTO.toEntity();
+        bed.setRoom(room);
         room.getBeds().add(bed);
+
         Bed savedBed = bedRepository.save(bed);
         return savedBed.getId();
     }

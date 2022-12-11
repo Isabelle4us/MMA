@@ -4,7 +4,7 @@ import cs631.MMA.entities.Consultation;
 import cs631.MMA.entities.Illness;
 import cs631.MMA.entities.Patient;
 import cs631.MMA.entities.Physician;
-import cs631.MMA.models.ConsultationRequest;
+import cs631.MMA.models.ConsultationDTO;
 import cs631.MMA.repositories.ConsultationRepository;
 import cs631.MMA.repositories.IllnessRepository;
 import cs631.MMA.repositories.PatientRepository;
@@ -31,24 +31,20 @@ public class ConsultationController {
     private IllnessRepository illnessRepository;
 
     @PostMapping
-    public @ResponseBody String addConsultation (@RequestBody ConsultationRequest request) {
-        Physician physician = physicianRepository.findById(request.getPhysicianId())
+    public @ResponseBody String addConsultation (@RequestBody ConsultationDTO consultationDTO) {
+        Physician physician = physicianRepository.findById(consultationDTO.getPhysicianId())
                 .orElseThrow(() -> new IllegalArgumentException("No physician found"));
 
-        Patient patient = patientRepository.findById(request.getPatientId())
+        Patient patient = patientRepository.findById(consultationDTO.getPatientId())
                 .orElseThrow(() -> new IllegalArgumentException("No patient found"));
 
-        Illness illness = illnessRepository.findById(request.getIllnessId())
+        Illness illness = illnessRepository.findById(consultationDTO.getIllnessId())
                 .orElseThrow(() -> new IllegalArgumentException("No illness found"));
 
-        Consultation consultation = Consultation.builder()
-                .physician(physician)
-                .patient(patient)
-                .illness(illness)
-                .date(request.getDate())
-                .start(request.getStart())
-                .end(request.getEnd())
-                .build();
+        Consultation consultation = consultationDTO.toConsultation();
+        consultation.setPhysician(physician);
+        consultation.setPatient(patient);
+        consultation.setIllness(illness);
 
         Consultation savedConsultation = consultationRepository.save(consultation);
 
