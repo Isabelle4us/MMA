@@ -1,12 +1,11 @@
 package cs631.MMA.entities;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import cs631.MMA.models.ConsultationDTO;
 import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.time.LocalTime;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -27,17 +26,17 @@ public class Consultation {
 
     @ManyToOne
     private Illness illness;
-    private LocalDate date;
-    private LocalTime start;
-    private LocalTime end;
+    private Date date;
+    private Date startDate;
+    private Date endDate;
     private Boolean diagnosed;
     private Boolean active;
 
     public ConsultationDTO toDTO() {
         return ConsultationDTO.builder()
                 .date(this.date)
-                .start(this.start)
-                .end(this.end)
+                .startDate(this.startDate)
+                .endDate(this.endDate)
                 .diagnosed(this.diagnosed)
                 .active(this.active)
                 .id(this.id)

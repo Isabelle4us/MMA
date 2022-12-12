@@ -5,6 +5,7 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Date;
 
 @Setter
 @Getter
@@ -16,17 +17,17 @@ public class ConsultationDTO {
     private Integer physicianId;
     private Integer patientId;
     private Integer illnessId;
-    private LocalDate date;
-    private LocalTime start;
-    private LocalTime end;
+    private Date date;
+    private Date startDate;
+    private Date endDate;
     private Boolean diagnosed;
     private Boolean active;
 
     public Consultation toConsultation() {
         return Consultation.builder()
                 .date(this.date)
-                .start(this.start)
-                .end(this.end)
+                .startDate(this.startDate)
+                .endDate(this.endDate)
                 .diagnosed(this.diagnosed)
                 .active(this.active)
                 .build();

@@ -13,7 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @Controller
 @RequestMapping(path="/consultation")
@@ -30,8 +33,10 @@ public class ConsultationController {
     @Autowired
     private IllnessRepository illnessRepository;
 
+    DateFormat formatter = new SimpleDateFormat("yyyy/MM/dd");
+
     @PostMapping
-    public @ResponseBody String addConsultation (@RequestBody ConsultationDTO consultationDTO) {
+    public @ResponseBody String addConsultation (@RequestBody ConsultationDTO consultationDTO) throws ParseException {
         Physician physician = physicianRepository.findById(consultationDTO.getPhysicianId())
                 .orElseThrow(() -> new IllegalArgumentException("No physician found"));
 
@@ -42,6 +47,10 @@ public class ConsultationController {
                 .orElseThrow(() -> new IllegalArgumentException("No illness found"));
 
         Consultation consultation = consultationDTO.toConsultation();
+        Date startDate = consultation.getStartDate();
+        Date dateOnly = formatter.parse(formatter.format(startDate));
+        consultation.setDate(dateOnly);
+
         consultation.setPhysician(physician);
         consultation.setPatient(patient);
         consultation.setIllness(illness);
