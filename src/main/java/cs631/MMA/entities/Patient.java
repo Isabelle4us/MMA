@@ -9,6 +9,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -28,7 +29,7 @@ public class Patient {
     @Enumerated(EnumType.STRING)
     private Gender gender;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private LocalDate birthday;
+    private Date birthday;
     @Enumerated(EnumType.STRING)
     private BloodType bloodType;
     private Double bloodSugar;

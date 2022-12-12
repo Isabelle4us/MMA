@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
 @RequestMapping(path="/illness")
 public class IllnessController {
@@ -28,5 +30,10 @@ public class IllnessController {
     @GetMapping("/{id}")
     public @ResponseBody Illness getIllness (@PathVariable Integer id) {
         return illnessRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("No illness found"));
+    }
+
+    @GetMapping
+    public @ResponseBody Iterable<Illness> getIllnesses () {
+        return illnessRepository.findAll();
     }
 }

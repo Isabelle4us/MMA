@@ -10,6 +10,7 @@ import javax.persistence.Column;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import java.time.LocalDate;
+import java.util.Date;
 
 @Setter
 @Getter
@@ -22,8 +23,7 @@ public class PatientDTO {
     private String name;
     private String tel;
     private Gender gender;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private LocalDate birthday;
+    private Date birthday;
     private BloodType bloodType;
     private Double bloodSugar;
     private Double HDL;
