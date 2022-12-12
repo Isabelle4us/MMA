@@ -16,9 +16,11 @@ import org.springframework.web.bind.annotation.*;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
-@Controller
+@RestController
 @RequestMapping(path="/consultation")
 public class ConsultationController {
     @Autowired
@@ -60,5 +62,12 @@ public class ConsultationController {
         physician.getConsultations().add(consultation);
         patient.getConsultations().add(consultation);
         return savedConsultation.getId().toString();
+    }
+
+    @GetMapping
+    public List<ConsultationDTO> getConsultations() {
+        List<ConsultationDTO> list = new ArrayList<>();
+        consultationRepository.findAll().forEach(consultation -> list.add(consultation.toDTO()));
+        return list;
     }
 }
