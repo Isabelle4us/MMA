@@ -70,4 +70,11 @@ public class ConsultationController {
         consultationRepository.findAll().forEach(consultation -> list.add(consultation.toDTO()));
         return list;
     }
+
+    @GetMapping("/{id}")
+    public ConsultationDTO getConsultationById(@PathVariable Integer id) {
+        return consultationRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("no consultation id found"))
+                .toDTO();
+    }
 }

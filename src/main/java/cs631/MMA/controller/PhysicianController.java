@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Controller
+@RestController
 @RequestMapping(path="/physician")
 public class PhysicianController {
     @Autowired
@@ -25,8 +25,9 @@ public class PhysicianController {
     }
 
     @GetMapping("/{id}")
-    public @ResponseBody Physician getPhysicianById (@PathVariable Integer id) {
-        return physicianRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("physicianId not found"));
+    public @ResponseBody PhysicianDTO getPhysicianById (@PathVariable Integer id) {
+        return physicianRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("physicianId not found"))
+                .toDTO();
     }
 
     @DeleteMapping("/{id}")
