@@ -3,10 +3,7 @@ package cs631.MMA.models;
 import cs631.MMA.entities.*;
 import lombok.*;
 
-import javax.persistence.FetchType;
-import javax.persistence.ManyToOne;
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.util.Date;
 
 @Setter
 @Getter
@@ -19,17 +16,17 @@ public class OperationDTO {
     private Integer patientId;
     private Integer surgeryId;
     private String location;
-    private LocalDate date;
-    private LocalTime start;
-    private LocalTime end;
+    private Date date;
+    private Date startDate;
+    private Date endDate;
     private Boolean finished;
 
     public Operation toOperation() {
         return Operation.builder()
                 .location(this.location)
                 .date(this.date)
-                .start(this.start)
-                .end(this.end)
+                .startDate(this.startDate)
+                .endDate(this.endDate)
                 .finished(this.finished)
                 .build();
     }

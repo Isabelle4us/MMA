@@ -1,12 +1,10 @@
 package cs631.MMA.entities;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import cs631.MMA.models.OperationDTO;
 import lombok.*;
 
 import javax.persistence.*;
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -25,9 +23,9 @@ public class Operation {
     @ManyToOne
     private Surgery surgery;
     private String location;
-    private LocalDate date;
-    private LocalTime start;
-    private LocalTime end;
+    private Date date;
+    private Date startDate;
+    private Date endDate;
     private Boolean finished;
 
     public OperationDTO toDTO() {
@@ -38,8 +36,8 @@ public class Operation {
                 .surgeryId(this.surgery.getId())
                 .location(this.location)
                 .date(this.date)
-                .start(this.start)
-                .end(this.end)
+                .startDate(this.startDate)
+                .endDate(this.endDate)
                 .finished(this.finished)
                 .build();
     }

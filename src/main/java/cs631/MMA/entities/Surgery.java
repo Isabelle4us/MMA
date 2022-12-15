@@ -15,6 +15,7 @@ public class Surgery {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    private String name;
     private Integer surgeryCode;
     private String category;
     private String location;
