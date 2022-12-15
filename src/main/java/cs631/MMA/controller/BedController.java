@@ -35,16 +35,21 @@ public class BedController {
         Optional<Room> roomOptional = roomRepository.findById(bedDTO.getRoomId());
         Room room = null;
         if (roomOptional.isEmpty()) {
-            room = roomRepository.save(new Room());
+            room = roomRepository.save(new Room(bedDTO.getRoomId()));
         } else {
             room = roomOptional.get();
         }
 
         Bed bed = bedDTO.toEntity();
         bed.setRoom(room);
-        room.getBeds().add(bed);
 
         Bed savedBed = bedRepository.save(bed);
         return savedBed.getId();
+    }
+
+    @DeleteMapping("/{id}")
+    public @ResponseBody Integer deleteBedById(@PathVariable Integer id) {
+        bedRepository.deleteById(id);
+        return id;
     }
 }
