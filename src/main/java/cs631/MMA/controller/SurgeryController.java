@@ -12,7 +12,8 @@ public class SurgeryController {
     private SurgeryRepository surgeryRepository;
 
     @PostMapping
-    public Integer addSurgery(Surgery surgery) {
+    public Integer addSurgery(@RequestBody Surgery surgery) {
+        System.out.println(surgery);
         Surgery saved = surgeryRepository.save(surgery);
         return saved.getId();
     }
