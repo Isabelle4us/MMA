@@ -5,10 +5,10 @@ import cs631.MMA.models.InpatientDTO;
 import cs631.MMA.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @RequestMapping(path="/inpatient")
@@ -31,6 +31,8 @@ public class InpatientController {
         Nurse nurse = nurseRepository.findById(inpatientDTO.getNurseId()).orElseThrow(() -> new IllegalArgumentException("patientId not found"));
         Physician physician = physicianRepository.findById(inpatientDTO.getPhysicianId()).orElseThrow(() -> new IllegalArgumentException("physicianId not found"));
 
+        bed.setAvailable(false);
+        bedRepository.save(bed);
         Inpatient inpatient = inpatientDTO.toInpatient();
         inpatient.setBed(bed);
         inpatient.setPatient(patient);
@@ -39,5 +41,12 @@ public class InpatientController {
 
         Inpatient saved = inpatientRepository.save(inpatient);
         return saved.getId();
+    }
+
+    @GetMapping
+    public @ResponseBody List<InpatientDTO> getInpatients() {
+        List<InpatientDTO> list = new ArrayList<>();
+        inpatientRepository.findAll().forEach(inpatient -> list.add(inpatient.toDTO()));
+        return list;
     }
 }
