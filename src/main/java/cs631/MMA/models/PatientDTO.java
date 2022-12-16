@@ -31,6 +31,8 @@ public class PatientDTO {
     private Double triglyceride;
     private String SSN;
 
+    private Boolean chol;
+
     public Patient toPatient() {
         return Patient.builder()
                 .HDL(this.getHDL())

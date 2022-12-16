@@ -45,6 +45,18 @@ public class PatientController {
             throw new IllegalArgumentException("No patient id provided");
         }
         Patient patient = getPatientById(patientDTO.getId());
+
+        if (patientDTO.getChol() != null && patientDTO.getChol()) {
+            //only update chol data
+            patient.setBloodSugar(patientDTO.getBloodSugar());
+            patient.setHDL(patientDTO.getHDL());
+            patient.setLDL(patientDTO.getLDL());
+            patient.setTriglyceride(patientDTO.getTriglyceride());
+            patientRepository.save(patient);
+            return "Patient updated";
+        }
+
+
         updatePatientByDTO(patient, patientDTO);
         patientRepository.save(patient);
         return "Patient updated";
